@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Maya - Economía, Sociedad y Política</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-pattern"></div>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="maya-symbol">⚝</div>
+            <h1 class="hero-title">Quiz de la Civilización Maya</h1>
+            <p class="hero-subtitle">Descubre los secretos de la economía, sociedad y política maya</p>
+            <button class="start-btn" id="startQuiz">Comenzar Aventura</button>
+        </div>
+        <div class="floating-elements">
+            <div class="floating-symbol">𝕬</div>
+            <div class="floating-symbol">⚡</div>
+            <div class="floating-symbol">⚱</div>
+            <div class="floating-symbol">☽</div>
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section class="quiz-container" id="quizContainer">
+        <div class="quiz-header">
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="quiz-info">
+                <span class="question-counter" id="questionCounter">Pregunta 1 de 10</span>
+                <span class="score-counter" id="scoreCounter">Respuestas correctas: 0</span>
+            </div>
+        </div>
+
+        <div class="quiz-content">
+            <div class="question-card" id="questionCard">
+                <h2 class="question-title" id="questionTitle"></h2>
+                <div class="options-container" id="optionsContainer">
+                    <!-- Options will be inserted here -->
+                </div>
+                <button class="next-btn" id="nextBtn" style="display: none;">Siguiente Pregunta</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results-container" id="resultsContainer">
+        <div class="results-content">
+            <div class="maya-symbol-large">⚝</div>
+            <h2 class="results-title" id="resultsTitle"></h2>
+            <div class="score-display" id="finalScore"></div>
+            <div class="score-message" id="scoreMessage"></div>
+            <div class="results-actions">
+                <button class="restart-btn" id="restartBtn">Intentar de Nuevo</button>
+                <button class="review-btn" id="reviewBtn">Ver Respuestas</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Review Section -->
+    <section class="review-container" id="reviewContainer">
+        <div class="review-content">
+            <h2 class="review-title">Revisión de Respuestas</h2>
+            <div class="review-list" id="reviewList">
+                <!-- Review items will be inserted here -->
+            </div>
+            <button class="back-to-results-btn" id="backToResults">Volver a Resultados</button>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
