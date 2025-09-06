@@ -116,7 +116,7 @@ const quizQuestions = [
 let currentQuestion = 0;
 let score = 0;
 let userAnswers = [];
-let gameState = 'start'; // 'start', 'playing', 'results', 'review'
+let gameState = 'start';
 
 // DOM elements
 const hero = document.querySelector('.hero');
@@ -143,7 +143,7 @@ startBtn.addEventListener('click', startQuiz);
 nextBtn.addEventListener('click', nextQuestion);
 restartBtn.addEventListener('click', restartQuiz);
 reviewBtn.addEventListener('click', showReview);
-backToResults.addEventListener('click', showResults);
+backToResults.addEventListener('click', backToResultsFromReview);
 
 // Initialize the quiz
 function startQuiz() {
@@ -232,7 +232,7 @@ function nextQuestion() {
         showQuestion();
         updateUI();
     } else {
-        showResults();
+        showFinalResults();
     }
 }
 
@@ -252,7 +252,7 @@ function updateProgress() {
 }
 
 // Show results screen with detailed feedback
-function showResults() {
+function showFinalResults() {
     gameState = 'results';
     quizContainer.style.display = 'none';
     resultsContainer.style.display = 'flex';
@@ -305,6 +305,8 @@ function showResults() {
 
 // Create special celebration effect for perfect score
 function createCelebrationEffect() {
+    console.log('Creating celebration effect for perfect score!');
+    
     // Golden confetti explosion
     for (let i = 0; i < 30; i++) {
         setTimeout(() => {
@@ -349,6 +351,8 @@ function createCelebrationEffect() {
 
 // Create success effect for scores 8-9
 function createSuccessEffect() {
+    console.log('Creating success effect for high score!');
+    
     // Victory stars
     for (let i = 0; i < 15; i++) {
         setTimeout(() => {
@@ -377,10 +381,8 @@ function createSuccessEffect() {
 
 // Animation functions
 function playCorrectAnimation() {
-    // Create floating success elements
     createFloatingElements('✨', '#00A86B', 5);
     
-    // Add screen flash effect
     const flash = document.createElement('div');
     flash.style.cssText = `
         position: fixed;
@@ -399,10 +401,8 @@ function playCorrectAnimation() {
 }
 
 function playIncorrectAnimation() {
-    // Create floating elements for incorrect answer
     createFloatingElements('💫', '#dc3545', 3);
     
-    // Add screen shake effect
     document.body.style.animation = 'incorrectShake 0.6s ease';
     setTimeout(() => {
         document.body.style.animation = '';
@@ -475,70 +475,63 @@ function restartQuiz() {
     reviewContainer.style.display = 'none';
     hero.style.display = 'flex';
     
-    // Reset progress bar
     progressBar.style.width = '0%';
+    
+    // Clean up any remaining effects
+    document.querySelectorAll('[style*="position: fixed"]').forEach(el => {
+        if (el.style.pointerEvents === 'none' && el.style.zIndex === '1000') {
+            el.remove();
+        }
+    });
 }
 
 // Go back to results from review
-function showResults() {
+function backToResultsFromReview() {
     reviewContainer.style.display = 'none';
     resultsContainer.style.display = 'flex';
 }
 
-// Add CSS animations dynamically
-const styleSheet = document.createElement('style');
-styleSheet.textContent = `
-    @keyframes flashCorrect {
-        0% { opacity: 0; }
-        50% { opacity: 1; }
-        100% { opacity: 0; }
-    }
-    
-    @keyframes floatingElement {
-        0% { 
-            opacity: 1; 
-            transform: translateY(0) scale(1) rotate(0deg); 
+// Add keyboard navigation
+document.addEventListener('keydown', function(e) {
+    if (gameState === 'playing') {
+        const num = parseInt(e.key);
+        if (num >= 1 && num <= 4) {
+            const buttons = optionsContainer.querySelectorAll('.option-btn');
+            if (buttons[num - 1] && buttons[num - 1].style.pointerEvents !== 'none') {
+                buttons[num - 1].click();
+            }
         }
-        100% { 
-            opacity: 0; 
-            transform: translateY(-100px) scale(1.5) rotate(360deg); 
+        if (e.key === 'Enter' && nextBtn.style.display === 'block') {
+            nextBtn.click();
         }
     }
-`;
-document.head.appendChild(styleSheet);
-
-// Add some interactive sound effects (visual feedback)
-function addVisualFeedback(element, type) {
-    const originalTransform = element.style.transform;
     
-    if (type === 'hover') {
-        element.style.transform = 'scale(1.05)';
-        element.style.transition = 'all 0.2s ease';
-    } else if (type === 'click') {
-        element.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-            element.style.transform = originalTransform;
-        }, 150);
+    if (e.key === 'Escape' && gameState !== 'start') {
+        if (confirm('¿Estás seguro de que quieres reiniciar el quiz?')) {
+            restartQuiz();
+        }
     }
-}
+});
 
-// Add hover effects to buttons
+// Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Add interactive effects to buttons
-    const buttons = document.querySelectorAll('button');
-    buttons.forEach(button => {
-        button.addEventListener('mouseenter', () => addVisualFeedback(button, 'hover'));
-        button.addEventListener('mouseleave', () => {
-            button.style.transform = '';
-        });
-        button.addEventListener('mousedown', () => addVisualFeedback(button, 'click'));
+    console.log('Quiz Maya initialized!');
+    
+    // Add hover effects to buttons
+    document.addEventListener('click', function(e) {
+        if (e.target.tagName === 'BUTTON') {
+            e.target.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                e.target.style.transform = '';
+            }, 150);
+        }
     });
     
-    // Add particle effect to hero section
+    // Create background particles
     createBackgroundParticles();
 });
 
-// Create background particles for extra visual appeal
+// Create background particles
 function createBackgroundParticles() {
     const particleContainer = document.createElement('div');
     particleContainer.style.cssText = `
@@ -551,7 +544,7 @@ function createBackgroundParticles() {
         z-index: 0;
     `;
     
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 30; i++) {
         const particle = document.createElement('div');
         particle.style.cssText = `
             position: absolute;
@@ -561,46 +554,11 @@ function createBackgroundParticles() {
             border-radius: 50%;
             left: ${Math.random() * 100}%;
             top: ${Math.random() * 100}%;
-            opacity: ${Math.random() * 0.5 + 0.2};
-            animation: particleFloat ${Math.random() * 10 + 10}s linear infinite;
+            opacity: ${Math.random() * 0.3 + 0.1};
+            animation: particleFloat ${Math.random() * 15 + 10}s linear infinite;
         `;
         particleContainer.appendChild(particle);
     }
     
     document.body.appendChild(particleContainer);
 }
-
-// Add particle animation
-const particleStyle = document.createElement('style');
-particleStyle.textContent = `
-    @keyframes particleFloat {
-        0% { transform: translateY(100vh) rotate(0deg); }
-        100% { transform: translateY(-100px) rotate(360deg); }
-    }
-`;
-document.head.appendChild(particleStyle);
-
-// Add keyboard navigation
-document.addEventListener('keydown', function(e) {
-    if (gameState === 'playing') {
-        // Allow number keys 1-4 to select answers
-        const num = parseInt(e.key);
-        if (num >= 1 && num <= 4) {
-            const buttons = optionsContainer.querySelectorAll('.option-btn');
-            if (buttons[num - 1] && buttons[num - 1].style.pointerEvents !== 'none') {
-                buttons[num - 1].click();
-            }
-        }
-        // Enter key for next question
-        if (e.key === 'Enter' && nextBtn.style.display === 'block') {
-            nextBtn.click();
-        }
-    }
-    
-    // Escape key to restart from anywhere
-    if (e.key === 'Escape' && gameState !== 'start') {
-        if (confirm('¿Estás seguro de que quieres reiniciar el quiz?')) {
-            restartQuiz();
-        }
-    }
-});
