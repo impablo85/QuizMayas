@@ -251,7 +251,7 @@ function updateProgress() {
     progressBar.style.width = progress + '%';
 }
 
-// Show results screen
+// Show results screen with detailed feedback
 function showResults() {
     gameState = 'results';
     quizContainer.style.display = 'none';
@@ -260,29 +260,173 @@ function showResults() {
     const percentage = Math.round((score / quizQuestions.length) * 100);
     finalScore.textContent = `${score}/${quizQuestions.length} (${percentage}%)`;
     
-    // Determine results message based on score
-    let title, message;
-    if (percentage >= 90) {
-        title = "¡Eres un Experto Maya! 🏆";
-        message = "¡Increíble! Conoces muy bien la civilización maya. Tu sabiduría es comparable a la de un sabio maya antiguo.";
+    // Determine results message based on score with detailed summary
+    let title, message, summary;
+    
+    if (score === 10) {
+        title = "¡PERFECCIÓN MAYA ALCANZADA! 👑✨";
+        message = "¡EXTRAORDINARIO! Has logrado la puntuación perfecta. Eres un verdadero sabio maya, comparable a los grandes astrónomos y matemáticos de Tikal y Chichen Itzá. Tu conocimiento sobre la economía del cacao, la estructura social jerárquica y el sistema político de ciudades-estado es impecable.";
+        summary = "🏆 LOGRO DESBLOQUEADO: 'Sabio Maya Supremo' - Has demostrado un dominio total de la civilización maya. ¡Felicidades por este logro excepcional!";
+        createCelebrationEffect();
+    } else if (score >= 8) {
+        title = score === 9 ? "¡CASI PERFECCIÓN MAYA! 🌟⚡" : "¡EXPERTO MAYA CERTIFICADO! 🏆📚";
+        message = score === 9 ? 
+            "¡IMPRESIONANTE! Con 9 respuestas correctas, estás a un paso de la perfección. Tu conocimiento sobre los sistemas agrícolas, la estructura social y las alianzas políticas mayas es excepcional. Solo un pequeño detalle te separa de ser un sabio maya completo." :
+            "¡EXCELENTE! Has demostrado un conocimiento sólido y avanzado de la civilización maya. Entiendes muy bien cómo funcionaba su economía basada en agricultura, su sociedad estratificada y su complejo sistema político de ciudades-estado.";
+        summary = score === 9 ? 
+            "🥈 LOGRO DESBLOQUEADO: 'Sumo Sacerdote Maya' - Tu sabiduría rivaliza con los grandes líderes de Palenque y Copán." :
+            "🥉 LOGRO DESBLOQUEADO: 'Noble Maya Distinguido' - Has alcanzado un nivel de conocimiento que te honra como un verdadero estudioso de esta gran civilización.";
+        createSuccessEffect();
     } else if (percentage >= 70) {
-        title = "¡Buen Conocimiento! ⭐";
-        message = "¡Muy bien! Tienes un buen entendimiento de la cultura maya. Solo necesitas repasar algunos detalles.";
+        title = "¡Buen Conocimiento Maya! ⭐📖";
+        message = `Con ${score} respuestas correctas, tienes una buena base sobre la civilización maya. Comprendes conceptos importantes sobre su economía agrícola, estructura social y organización política, pero hay algunos aspectos que puedes reforzar para dominar completamente el tema.`;
+        summary = "📊 Resumen: Tienes una comprensión sólida de los fundamentos mayas. Te recomendamos repasar los detalles sobre el comercio, el papel de las mujeres nobles y los sistemas políticos para alcanzar la excelencia.";
     } else if (percentage >= 50) {
-        title = "Conocimiento Básico 📚";
-        message = "Tienes una base sólida, pero hay espacio para mejorar. ¡Sigue aprendiendo sobre esta fascinante civilización!";
+        title = "Conocimiento Básico Maya 📚🌱";
+        message = `Has respondido correctamente ${score} preguntas. Tienes una base inicial sobre los mayas, pero hay mucho espacio para crecer. Los conceptos básicos sobre su economía, sociedad y política necesitan más estudio y práctica.`;
+        summary = "📈 Resumen: Estás en el camino correcto para entender esta fascinante civilización. Enfócate en estudiar la importancia del maíz, la estructura social jerárquica y el sistema de ciudades-estado para mejorar tu puntuación.";
     } else {
-        title = "¡A Seguir Aprendiendo! 💪";
-        message = "No te desanimes. Los mayas tenían un dicho: 'El conocimiento se construye paso a paso, como las pirámides'. ¡Inténtalo de nuevo!";
+        title = "¡A Seguir Aprendiendo Sobre los Mayas! 💪🏛️";
+        message = `Con ${score} respuestas correctas, estás comenzando tu viaje de aprendizaje sobre los mayas. No te desanimes: esta civilización es compleja y fascinante. Cada gran arqueólogo comenzó desde cero.`;
+        summary = "🔍 Resumen: Te recomendamos revisar los materiales de clase sobre economía maya (agricultura del maíz), sociedad (pirámide social) y política (ciudades-estado) antes de intentar nuevamente. ¡Los mayas construyeron sus pirámides piedra por piedra!";
     }
     
     resultsTitle.textContent = title;
-    scoreMessage.textContent = message;
+    scoreMessage.innerHTML = `
+        <div class="main-message">${message}</div>
+        <div class="summary-message">${summary}</div>
+    `;
     
     // Animate the results
     setTimeout(() => {
         resultsContainer.querySelector('.results-content').style.animation = 'cardAppear 0.8s ease-out';
     }, 100);
+}
+
+// Create special celebration effect for perfect score
+function createCelebrationEffect() {
+    // Golden confetti explosion
+    for (let i = 0; i < 30; i++) {
+        setTimeout(() => {
+            createFloatingElements('🏆', '#D4AF37', 1);
+            createFloatingElements('⭐', '#D4AF37', 1);
+            createFloatingElements('✨', '#00A86B', 1);
+        }, i * 100);
+    }
+    
+    // Screen golden glow effect
+    const celebration = document.createElement('div');
+    celebration.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, rgba(212, 175, 55, 0.1) 50%, transparent 100%);
+        pointer-events: none;
+        z-index: 1000;
+        animation: celebrationGlow 3s ease-out;
+    `;
+    document.body.appendChild(celebration);
+    
+    setTimeout(() => celebration.remove(), 3000);
+    
+    // Add crown effect to results
+    setTimeout(() => {
+        const crown = document.createElement('div');
+        crown.textContent = '👑';
+        crown.style.cssText = `
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 3rem;
+            animation: crownBounce 2s ease-in-out infinite;
+        `;
+        resultsContainer.querySelector('.maya-symbol-large').appendChild(crown);
+    }, 500);
+}
+
+// Create success effect for scores 8-9
+function createSuccessEffect() {
+    // Victory stars
+    for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+            createFloatingElements('⭐', '#D4AF37', 1);
+            createFloatingElements('🌟', '#00A86B', 1);
+        }, i * 150);
+    }
+    
+    // Success glow
+    const success = document.createElement('div');
+    success.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(0, 168, 107, 0.2) 0%, rgba(0, 168, 107, 0.05) 70%, transparent 100%);
+        pointer-events: none;
+        z-index: 1000;
+        animation: successGlow 2s ease-out;
+    `;
+    document.body.appendChild(success);
+    
+    setTimeout(() => success.remove(), 2000);
+}
+
+// Animation functions
+function playCorrectAnimation() {
+    // Create floating success elements
+    createFloatingElements('✨', '#00A86B', 5);
+    
+    // Add screen flash effect
+    const flash = document.createElement('div');
+    flash.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 168, 107, 0.1);
+        pointer-events: none;
+        z-index: 1000;
+        animation: flashCorrect 0.5s ease-out;
+    `;
+    document.body.appendChild(flash);
+    
+    setTimeout(() => flash.remove(), 500);
+}
+
+function playIncorrectAnimation() {
+    // Create floating elements for incorrect answer
+    createFloatingElements('💫', '#dc3545', 3);
+    
+    // Add screen shake effect
+    document.body.style.animation = 'incorrectShake 0.6s ease';
+    setTimeout(() => {
+        document.body.style.animation = '';
+    }, 600);
+}
+
+function createFloatingElements(symbol, color, count) {
+    for (let i = 0; i < count; i++) {
+        const element = document.createElement('div');
+        element.textContent = symbol;
+        element.style.cssText = `
+            position: fixed;
+            font-size: 2rem;
+            color: ${color};
+            pointer-events: none;
+            z-index: 1000;
+            left: ${Math.random() * 100}%;
+            top: ${Math.random() * 100}%;
+            animation: floatingElement 2s ease-out forwards;
+        `;
+        document.body.appendChild(element);
+        
+        setTimeout(() => element.remove(), 2000);
+    }
 }
 
 // Show review of answers
@@ -341,60 +485,6 @@ function showResults() {
     resultsContainer.style.display = 'flex';
 }
 
-// Animation functions
-function playCorrectAnimation() {
-    // Create floating success elements
-    createFloatingElements('✨', '#00A86B', 5);
-    
-    // Add screen flash effect
-    const flash = document.createElement('div');
-    flash.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 168, 107, 0.1);
-        pointer-events: none;
-        z-index: 1000;
-        animation: flashCorrect 0.5s ease-out;
-    `;
-    document.body.appendChild(flash);
-    
-    setTimeout(() => flash.remove(), 500);
-}
-
-function playIncorrectAnimation() {
-    // Create floating elements for incorrect answer
-    createFloatingElements('💫', '#dc3545', 3);
-    
-    // Add screen shake effect
-    document.body.style.animation = 'incorrectShake 0.6s ease';
-    setTimeout(() => {
-        document.body.style.animation = '';
-    }, 600);
-}
-
-function createFloatingElements(symbol, color, count) {
-    for (let i = 0; i < count; i++) {
-        const element = document.createElement('div');
-        element.textContent = symbol;
-        element.style.cssText = `
-            position: fixed;
-            font-size: 2rem;
-            color: ${color};
-            pointer-events: none;
-            z-index: 1000;
-            left: ${Math.random() * 100}%;
-            top: ${Math.random() * 100}%;
-            animation: floatingElement 2s ease-out forwards;
-        `;
-        document.body.appendChild(element);
-        
-        setTimeout(() => element.remove(), 2000);
-    }
-}
-
 // Add CSS animations dynamically
 const styleSheet = document.createElement('style');
 styleSheet.textContent = `
@@ -413,11 +503,6 @@ styleSheet.textContent = `
             opacity: 0; 
             transform: translateY(-100px) scale(1.5) rotate(360deg); 
         }
-    }
-    
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
     }
 `;
 document.head.appendChild(styleSheet);
@@ -519,35 +604,3 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
-
-// Add loading animation for smooth transitions
-function showLoadingAnimation() {
-    const loader = document.createElement('div');
-    loader.className = 'loading-spinner';
-    loader.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 50px;
-        height: 50px;
-        border: 3px solid var(--maya-stone);
-        border-top: 3px solid var(--maya-gold);
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        z-index: 2000;
-    `;
-    document.body.appendChild(loader);
-    
-    setTimeout(() => loader.remove(), 1000);
-}
-
-// Add spin animation for loader
-const loaderStyle = document.createElement('style');
-loaderStyle.textContent = `
-    @keyframes spin {
-        0% { transform: translate(-50%, -50%) rotate(0deg); }
-        100% { transform: translate(-50%, -50%) rotate(360deg); }
-    }
-`;
-document.head.appendChild(loaderStyle);
