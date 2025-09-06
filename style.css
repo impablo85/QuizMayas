@@ -551,9 +551,55 @@ body {
     100% { background-position: 200% center; }
 }
 
+/* Additional animations for celebrations */
+@keyframes celebrationGlow {
+    0% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 0; transform: scale(1); }
+}
+
+@keyframes successGlow {
+    0% { opacity: 0; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.1); }
+    100% { opacity: 0; transform: scale(1); }
+}
+
+@keyframes crownBounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-10px); }
+}
+
+@keyframes goldShimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
+
 @keyframes pulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.05); }
+}
+
+@keyframes flashCorrect {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes floatingElement {
+    0% { 
+        opacity: 1; 
+        transform: translateY(0) scale(1) rotate(0deg); 
+    }
+    100% { 
+        opacity: 0; 
+        transform: translateY(-100px) scale(1.5) rotate(360deg); 
+    }
+}
+
+@keyframes particleFloat {
+    0% { transform: translateY(100vh) rotate(0deg); }
+    100% { transform: translateY(-100px) rotate(360deg); }
+}
 }
 
 /* Responsive Design */
