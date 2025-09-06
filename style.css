@@ -299,7 +299,7 @@ body {
 
 .results-content {
     text-align: center;
-    max-width: 600px;
+    max-width: 700px;
     background: rgba(255, 255, 255, 0.95);
     padding: 3rem;
     border-radius: 20px;
@@ -312,6 +312,7 @@ body {
     color: var(--maya-gold);
     margin-bottom: 1rem;
     animation: symbolPulse 3s ease-in-out infinite;
+    position: relative;
 }
 
 .results-title {
@@ -333,6 +334,24 @@ body {
     color: var(--maya-brown);
     margin-bottom: 2rem;
     line-height: 1.6;
+    text-align: left;
+}
+
+.main-message {
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+.summary-message {
+    padding: 1.5rem;
+    background: rgba(212, 175, 55, 0.15);
+    border-left: 4px solid var(--maya-gold);
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--maya-obsidian);
+    margin-top: 1rem;
 }
 
 .results-actions {
@@ -426,6 +445,41 @@ body {
     color: var(--maya-brown);
 }
 
+/* Achievement Badge */
+.achievement-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(45deg, var(--maya-gold), var(--maya-terracotta));
+    color: var(--maya-obsidian);
+    border-radius: 20px;
+    font-weight: 600;
+    margin: 0.5rem 0;
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Perfect Score Effects */
+.perfect-score {
+    position: relative;
+    overflow: hidden;
+}
+
+.perfect-score::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(212, 175, 55, 0.4),
+        transparent
+    );
+    animation: goldShimmer 2s infinite;
+}
+
 /* Animations */
 @keyframes heroFadeIn {
     from { opacity: 0; transform: translateY(50px); }
@@ -473,6 +527,33 @@ body {
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-5px); }
     75% { transform: translateX(5px); }
+}
+
+@keyframes celebrationGlow {
+    0% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 0; transform: scale(1); }
+}
+
+@keyframes successGlow {
+    0% { opacity: 0; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.1); }
+    100% { opacity: 0; transform: scale(1); }
+}
+
+@keyframes crownBounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-10px); }
+}
+
+@keyframes goldShimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
 }
 
 /* Responsive Design */
