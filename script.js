@@ -177,6 +177,7 @@ function showQuestion() {
     });
     
     nextBtn.style.display = 'none';
+    nextBtn.textContent = 'Siguiente Pregunta'; // Reset button text
     updateProgress();
 }
 
@@ -218,7 +219,15 @@ function selectAnswer(selectedIndex, selectedButton) {
         }
         
         setTimeout(() => {
-            nextBtn.style.display = 'block';
+            if (currentQuestion === quizQuestions.length - 1) {
+                // Si es la última pregunta, mostrar botón "Ver Resultados"
+                nextBtn.textContent = 'Ver Resultados';
+                nextBtn.style.display = 'block';
+            } else {
+                // Si no es la última, mostrar botón normal
+                nextBtn.textContent = 'Siguiente Pregunta';
+                nextBtn.style.display = 'block';
+            }
         }, 1000);
         
     }, 300);
@@ -226,13 +235,14 @@ function selectAnswer(selectedIndex, selectedButton) {
 
 // Move to next question or show results
 function nextQuestion() {
-    currentQuestion++;
-    
-    if (currentQuestion < quizQuestions.length) {
+    if (currentQuestion === quizQuestions.length - 1) {
+        // Si estamos en la última pregunta, ir a resultados
+        showFinalResults();
+    } else {
+        // Si no, continuar con la siguiente pregunta
+        currentQuestion++;
         showQuestion();
         updateUI();
-    } else {
-        showFinalResults();
     }
 }
 
